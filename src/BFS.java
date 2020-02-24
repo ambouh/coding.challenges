@@ -9,43 +9,80 @@ import java.util.List;
 public class BFS {
 
     // Complete the bfs function below.
-    static int[] bfs(int n, int m, int[][] edges, int s) {
+    public static int[] bfs(int n, int m, int[][] edges, int s) {
+        //get an adjacent list
+        HashMap<Integer,List<Integer>> hMap = adjacentList(edges);
+
+        //solve by:
+        // making a queue
+        LinkedList<Integer> queue = new LinkedList<>();
+        int[] distance = new int[n-1];
+        int count = 1;
+        int weight = 6;
+
+        //add start node to queue
+        queue.add(s);
+
+        //for loop that goes through the queue
+        for(Integer node : queue) {
+
+            //marks as visited to the visited array,
+            //remove visited node from queue
+            queue.poll();
+
+            // run through its neighbors
+             List<Integer> neighbors = hMap.get(node);
+            for(Integer neighbor : neighbors) {
+                //if not added, add them to queue
+                queue.add(neighbor);
+                //add their score to the score array
+                distance[neighbor] = weight;
+            }
+
+
+            //update count
+            count++;
+
+            //update score
+            weight = weight * count;
+        }
+
+        return convertIntegers(hMap.get(s));
+    }
+
+    //returns the adjacent list needed to solve the breadth first search
+    public static HashMap<Integer,List<Integer>> adjacentList(int[][] edges){
         //create hashmap to represent an adjacent list
-        HashMap<Integer,List<Integer>> hMap = new HashMap<Integer, List<Integer>>();
+        HashMap<Integer,List<Integer>> hMap = new HashMap<>();
         List<Integer> _edges;
-        //_edges.add(1);
-        //_edges.add(2);
-        // hMap.put(1, _edges);
-        //System.out.println(hMap.toString());
-            /*Integer parent = new Integer(1);
-                _edges = new ArrayList<Integer>();
-               _edges.add(1);
-               _edges.add(2);
-                hMap.put(parent, _edges);
-                System.out.println(hMap);
-*/
+        Integer parent;
+
         //go through 2D array
         for(int i = 0; i < edges.length; i++){
             //in a j-row of array, add key and new list (if node not added)
+            parent = new Integer(edges[i][0]);
+            _edges = new ArrayList<>();
+
             for (int j  = 0; j < edges[i].length; j++){
-                Integer parent = new Integer(edges[i][0]);
-                _edges = new ArrayList<Integer>();
-                _edges.add(1);
-                _edges.add(2);
+
                 if(!hMap.containsKey(parent)){ //not added & j is 1st
                     hMap.put(parent, _edges);
-                    System.out.println(hMap);
                 } else {//add to list using parent
-                    // _edges = hMap.get(parent);
-                    // System.out.println(_edges);
+                    if (!parent.equals(edges[i][j])){ //doesn't add parent as edge
+                        _edges = hMap.get(parent);
+                        _edges.add(edges[i][j]);
+                    }
                 }
             }
         }
-        int[] arr =  {1,2,3};
-        return arr; // convertIntegers(_edges);
+
+        //prints to see if number has been added
+        System.out.println("Map: " + hMap);
+
+        return hMap;
     }
-    public static int[] convertIntegers(List<Integer> integers)
-    {
+
+    public static int[] convertIntegers(List<Integer> integers) {
         int[] ret = new int[integers.size()];
         for (int i=0; i < ret.length; i++)
         {
@@ -53,10 +90,28 @@ public class BFS {
         }
         return ret;
     }
+
     private static final Scanner scanner = new Scanner(System.in);
-    
+
     public static void main(String[] args)  throws IOException {
-        runBFS();
+
+        /*2
+        4 2
+        1 2
+        1 3
+          */
+        int[][] array2D = {{1,2}, {1,3}};
+
+        bfs(4, 2, array2D, 1);
+
+        /*
+        3 1
+        2 3
+        2
+        */
+        array2D = new int[][]{{3, 1}, {2, 3}};
+        bfs(3, 1, array2D, 2);
+        //runBFS();
     }
 
     public static void runBFS() throws IOException {
