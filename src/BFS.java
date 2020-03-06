@@ -16,38 +16,50 @@ public class BFS {
         //solve by:
         // making a queue
         LinkedList<Integer> queue = new LinkedList<>();
-        int[] distance = new int[n-1];
-        int count = 1;
+        int[] distance = new int[n];
+        int count = 0;
         int weight = 6;
-
+        boolean[] visited = new boolean[n+1];
+        //int[] visited = new int[n+1];
+        Integer node = null;
         //add start node to queue
         queue.add(s);
 
         //for loop that goes through the queue
-        for(Integer node : queue) {
+        while(!queue.isEmpty()) {
 
             //marks as visited to the visited array,
             //remove visited node from queue
-            queue.poll();
+            node = queue.poll();
 
             // run through its neighbors
-             List<Integer> neighbors = hMap.get(node);
-            for(Integer neighbor : neighbors) {
-                //if not added, add them to queue
-                queue.add(neighbor);
-                //add their score to the score array
-                distance[neighbor] = weight;
-            }
+             List<Integer> neighbors;
 
+             if ( hMap.get(node) != null ) { //hMap always an object it is best to check hMap.get(node), where as neighbors is null
+                 neighbors = hMap.get(node);
+                 //update count when neighbors exist, neighbors determine the level
+                 count++;
 
-            //update count
-            count++;
+                 //update score
+                 weight*=(count);
 
-            //update score
-            weight = weight * count;
+                 for (Integer neighbor : neighbors) {
+
+                     /*if not added, add them to queue and neighbor != start-node - skips vertex
+                      * (so distance array doesn't  go out of bounds)
+                      */
+                     if (!visited[neighbor]) { //if neighbor isn't visited or visited[x] == 0
+                         queue.add(neighbor);
+                         visited[neighbor] = true;
+                         //add their score to the score array
+                         if (neighbor>=1 || neighbor <=n) //makes sure it's not out of bounds
+                            distance[neighbor-1] = weight;
+                     }
+                 }
+             }
         }
 
-        return convertIntegers(hMap.get(s));
+        return printArray(distance, s);
     }
 
     //returns the adjacent list needed to solve the breadth first search
@@ -91,6 +103,26 @@ public class BFS {
         return ret;
     }
 
+    public static int[] printArray(int[] distance, int s) {
+        String str = "";
+        int[] new_dist = new int[distance.length-1];
+        int i = 0;
+        int j = 0;
+        int startPos = (s - 1);
+        while (i < distance.length){
+            if(i != startPos) { //skips starting position
+                if (distance[i] == 0) //assigns (-1) to unreachable
+                {new_dist[j] = -1; str += " " + -1;}
+                else
+                {new_dist[j] = distance[i]; str += " " + distance[i];}
+                j++;
+            }
+            i++;
+        }
+
+        System.out.println(str);
+        return new_dist;
+    }
     private static final Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args)  throws IOException {
@@ -109,8 +141,18 @@ public class BFS {
         2 3
         2
         */
-        array2D = new int[][]{{3, 1}, {2, 3}};
+        array2D = new int[][]{{2, 3}};
         bfs(3, 1, array2D, 2);
+
+        /*
+        5 3
+        1 2
+        1 3
+        3 4
+        1
+        */
+        array2D = new int[][]{{1, 2},{1, 3},{3, 4}};
+        bfs(5, 3, array2D, 1);
         //runBFS();
     }
 
