@@ -15,7 +15,7 @@ public class BFS {
 
         //solve by:
         // making a queue
-        LinkedList<Integer> queue = new LinkedList<>();
+        LinkedList<Integer> queue = new LinkedList<Integer>();
         int[] distance = new int[n];
         int count = 0;
         int weight = 6;
@@ -33,30 +33,30 @@ public class BFS {
             node = queue.poll();
 
             // run through its neighbors
-             List<Integer> neighbors;
+            List<Integer> neighbors;
 
-             if ( hMap.get(node) != null ) { //hMap always an object it is best to check hMap.get(node), where as neighbors is null
-                 neighbors = hMap.get(node);
-                 //update count when neighbors exist, neighbors determine the level
-                 count++;
+            if ( hMap.get(node) != null ) { //hMap always an object it is best to check hMap.get(node), where as neighbors is null
+                neighbors = hMap.get(node);
+                //update count when neighbors exist, neighbors determine the level
+                count++;
 
-                 //update score
-                 weight*=(count);
+                //update score
+                weight*=(count);
 
-                 for (Integer neighbor : neighbors) {
+                for (Integer neighbor : neighbors) {
 
-                     /*if not added, add them to queue and neighbor != start-node - skips vertex
-                      * (so distance array doesn't  go out of bounds)
-                      */
-                     if (!visited[neighbor]) { //if neighbor isn't visited or visited[x] == 0
-                         queue.add(neighbor);
-                         visited[neighbor] = true;
-                         //add their score to the score array
-                         if (neighbor>=1 || neighbor <=n) //makes sure it's not out of bounds
+                    /*if not added, add them to queue and neighbor != start-node - skips vertex
+                     * (so distance array doesn't  go out of bounds)
+                     */
+                    if (!visited[neighbor]) { //if neighbor isn't visited or visited[x] == 0
+                        queue.add(neighbor);
+                        visited[neighbor] = true;
+                        //add their score to the score array
+                        if (neighbor>=1 || neighbor <=n) //makes sure it's not out of bounds
                             distance[neighbor-1] = weight;
-                     }
-                 }
-             }
+                    }
+                }
+            }
         }
 
         return printArray(distance, s);
@@ -65,7 +65,7 @@ public class BFS {
     //returns the adjacent list needed to solve the breadth first search
     public static HashMap<Integer,List<Integer>> adjacentList(int[][] edges){
         //create hashmap to represent an adjacent list
-        HashMap<Integer,List<Integer>> hMap = new HashMap<>();
+        HashMap<Integer,List<Integer>> hMap = new HashMap<Integer, List<Integer>>();
         List<Integer> _edges;
         Integer parent;
 
@@ -73,7 +73,7 @@ public class BFS {
         for(int i = 0; i < edges.length; i++){
             //in a j-row of array, add key and new list (if node not added)
             parent = new Integer(edges[i][0]);
-            _edges = new ArrayList<>();
+            _edges = new ArrayList<Integer>();
 
             for (int j  = 0; j < edges[i].length; j++){
 
