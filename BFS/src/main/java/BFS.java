@@ -1,6 +1,7 @@
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,7 +60,7 @@ public class BFS {
             }
         }
 
-        return printArray(distance, s);
+        return makeArray(distance, s);
     }
 
     //returns the adjacent list needed to solve the breadth first search
@@ -103,8 +104,7 @@ public class BFS {
         return ret;
     }
 
-    public static int[] printArray(int[] distance, int s) {
-        String str = "";
+    public static int[] makeArray(int[] distance, int s) {
         int[] new_dist = new int[distance.length-1];
         int i = 0;
         int j = 0;
@@ -112,19 +112,24 @@ public class BFS {
         while (i < distance.length){
             if(i != startPos) { //skips starting position
                 if (distance[i] == 0) //assigns (-1) to unreachable
-                {new_dist[j] = -1; str += " " + -1;}
+                {new_dist[j] = -1; } //str += " " + -1;
                 else
-                {new_dist[j] = distance[i]; str += " " + distance[i];}
+                {new_dist[j] = distance[i]; } //str += " " + distance[i];
                 j++;
             }
             i++;
         }
-
-        System.out.println(str);
         return new_dist;
     }
-    private static final Scanner scanner = new Scanner(System.in);
 
+    public static String stringify(int[] arr) {
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < arr.length; i++) {
+            str.append(" " + arr[i]);
+        }
+
+        return str.toString();
+    }
     public static void main(String[] args)  throws IOException {
 
         /*2
@@ -156,10 +161,14 @@ public class BFS {
         //runBFS();
     }
 
-    public static void runBFS() throws IOException {
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
-
+    public static int[] runBFS(Scanner scanner) throws IOException {
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(System.out));
+        int[] result = new int[0];
         int q = scanner.nextInt();
+        /*
+         * skip any:
+         * \r\n (Windows) = new line
+         * */
         scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
         for (int qItr = 0; qItr < q; qItr++) {
@@ -184,7 +193,7 @@ public class BFS {
             int s = scanner.nextInt();
             scanner.skip("(\r\n|[\n\r\u2028\u2029\u0085])?");
 
-            int[] result = BFS.bfs(n, m, edges, s);
+            result = BFS.bfs(n, m, edges, s);
 
             for (int i = 0; i < result.length; i++) {
                 bufferedWriter.write(String.valueOf(result[i]));
@@ -200,5 +209,7 @@ public class BFS {
         bufferedWriter.close();
 
         scanner.close();
+
+        return result;
     }
 }
