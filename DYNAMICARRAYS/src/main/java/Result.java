@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
+//PROBLEM URL: https://www.hackerrank.com/challenges/dynamic-array/problem
 class Result {
     // List<List<Integer>> seqList;
     static int lastAnswer = 0;
