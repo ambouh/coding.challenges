@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
 
+//PROBLEM: https://www.hackerrank.com/challenges/array-left-rotation/problem
 public class LeftRotationArray {
 
     public static int[] leftRotation(int n, int d, int[] a){
